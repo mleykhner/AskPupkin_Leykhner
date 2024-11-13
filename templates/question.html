@@ -12,7 +12,7 @@
             </div>
             <div class="m-3">
                 <label>
-                    <input type="number" value="{{ question.upvotes }}" class="form-control form-control-sm text-center" style="width: 96px;">
+                    <input type="number" value="{{ question.votes_total }}" class="form-control form-control-sm text-center" style="width: 96px;">
                 </label>
             </div>
         </div>
@@ -21,12 +21,12 @@
                 <h2 class="card-title mb-1">{{ question.title }}</h2>
                 <p class="card-text mb-1">{{ question.text }}</p>
                 <div class="mt-auto">
-                    {% for tag in question.tags %}
+                    {% for tag in question.tags.all %}
                         <a class="text-decoration-none" href="{% url 'tagged' tag %}">
                                 <span class="badge rounded-pill"
-                                      style="background-color: {{ tag|string_to_hex_color_filter }};
-                                              color: {{ tag|get_contrast_color_filter }}"
-                                >{{ tag }}</span>
+                                      style="background-color: {{ tag.name|string_to_hex_color_filter }};
+                                              color: {{ tag.name|get_contrast_color_filter }}"
+                                >{{ tag.name }}</span>
                         </a>
                     {% endfor %}
                 </div>

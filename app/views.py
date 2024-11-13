@@ -1,37 +1,41 @@
 from django.shortcuts import render
 
+from app import models
 from app.pagination import paginate
-from models.answer import get_by_question_id
-from models.question import mock_questions, get_by_id, get_by_tag
-from models.user import mock_user
 
 
 def index(request):
-    questions = mock_questions
+    questions = models.Question.objects.new()
     page = paginate(request, questions)
     return render(
         request,
         'index.html',
-        {'questionCards': page.object_list, 'page':page}
+        {'questionCards': page.object_list, 'page': page}
     )
 
+def not_found(request, exception):
+    return render(request, 'not_found.html')
+
+
 def question(request, question_id):
-    question = get_by_id(question_id)
-    answers = get_by_question_id(question_id)
+    q = models.Question.objects.get_by_id(question_id)
+    answers = q.answers.all()
     page = paginate(request, answers)
     return render(
         request,
         'question.html',
-        {'question':question, 'answers':page.object_list, 'page':page}
+        {'question': q, 'answers': page.object_list, 'page': page}
     )
 
-def tag(request, tag_title):
-    questions = get_by_tag(tag_title)
+
+def tag(request, tag_name):
+    questions = models.Question.objects.with_tag(tag_name)
     page = paginate(request, questions)
     return render(
         request, 'tag.html',
-        {'tag_name': tag_title, 'questions': page.object_list, "page": page}
+        {'tag_name': tag_name, 'questions': page.object_list, "page": page}
     )
+
 
 def ask(request):
     return render(
@@ -39,12 +43,14 @@ def ask(request):
         'ask.html'
     )
 
+
 def settings(request):
     return render(
         request,
         'settings.html',
-        context={'user': mock_user}
+        # context={'user': mock_user}
     )
+
 
 def login(request):
     return render(
@@ -59,11 +65,12 @@ def signup(request):
         'signup.html'
     )
 
+
 def hot(request):
-    questions = mock_questions
-    questions.reverse()
+    questions = models.Question.objects.hot()
     page = paginate(request, questions)
     return render(
         request,
         'hot.html',
-        context={'questions': page.object_list, "page": page})
+        context={'questions': page.object_list, "page": page}
+    )

@@ -4,13 +4,13 @@
         <h2>Popular Tags</h2>
     </div>
     <div class="d-flex gap-2" style="align-items: flex-start; flex-wrap: wrap">
-        {% for tag in popular_tags %}
-            <a class="text-decoration-none" href="{% url 'tagged' tag.title %}">
+        {% for tag in popular_tags.all %}
+            <a class="text-decoration-none" href="{% url 'tagged' tag.name %}">
                 <span class="badge rounded-pill"
-                      style="background-color: {{ tag.title|string_to_hex_color_filter }};
-                      color: {{ tag.title|get_contrast_color_filter }};
+                      style="background-color: {{ tag.name|string_to_hex_color_filter }};
+                      color: {{ tag.name|get_contrast_color_filter }};
                       font-size: {{ tag.size }}px">
-                    {{ tag.title }}
+                    {{ tag.name }}
                 </span>
             </a>
     {% endfor %}

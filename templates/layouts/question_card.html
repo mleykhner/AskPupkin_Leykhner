@@ -10,7 +10,7 @@
                     <p class="text-truncate" style="font-size: x-small"><a href="#">@{{ question.author }}</a></p>
                </div>
                 <div class="my-3 mx-1">
-                    <input type="number" value="{{ question.upvotes }}" class="form-control form-control-sm text-center" style="width: 96px;">
+                    <input type="number" value="{{ question.votes_total }}" class="form-control form-control-sm text-center" style="width: 96px;">
                 </div>
             </div>
             <div class="col d-flex flex-column m-0 p-0">
@@ -20,14 +20,14 @@
                     </h5>
                     <p class="card-text mb-1">{{ question.text }}</p>
                     <div class="mt-auto">
-                        <a href="{% url 'question' question.id %}#answer">answer ({{ question.replies }})</a>
+                        <a href="{% url 'question' question.id %}#answer">answer ({{ question.answers.count }})</a>
                         <span>&nbsp;|&nbsp;</span>
-                        {% for tag in question.tags %}
-                            <a class="text-decoration-none" href="{% url 'tagged' tag %}">
+                        {% for tag in question.tags.all %}
+                            <a class="text-decoration-none" href="{% url 'tagged' tag.name %}">
                                 <span class="badge rounded-pill" 
-                                      style="background-color: {{ tag|string_to_hex_color_filter }};
-                                              color: {{ tag|get_contrast_color_filter }}"
-                                >{{ tag }}</span>
+                                      style="background-color: {{ tag.name|string_to_hex_color_filter }};
+                                              color: {{ tag.name|get_contrast_color_filter }}"
+                                >{{ tag.name }}</span>
                             </a>
                         {% endfor %}
                     </div>
