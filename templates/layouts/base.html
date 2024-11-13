@@ -1,0 +1,34 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>AskMe</title>
+    {% load django_bootstrap5 %}
+    {% bootstrap_css %}
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+</head>
+<body>
+{% block navbar %}
+    {% include 'layouts/navbar.html' %}
+{% endblock %}
+<main class="container-fluid row m-3 gap-3">
+    <div class="col-9">
+        {% block content %}
+
+        {% endblock %}
+    </div>
+    <div class="col">
+        <section class="mb-3">
+            {% include 'layouts/tagList.html' with popular_tags=popular_tags %}
+        </section>
+
+        <section>
+            {% include 'layouts/best_members_list.html' %}
+        </section>
+
+    </div>
+</main>
+</body>
+{% bootstrap_javascript %}
+</html>

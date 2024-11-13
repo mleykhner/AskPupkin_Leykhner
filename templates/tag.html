@@ -1,0 +1,23 @@
+{% extends "layouts/base.html" %}
+{% load custom_filters %}
+{% load static %}
+{% block content %}
+    <div class="row mb-5">
+        <div class="col d-flex gap-3 align-items-center">
+            <h2>Tag:</h2>
+            <span class="badge rounded-pill"
+                  style="background-color: {{ tag_name|string_to_hex_color_filter }};
+                          color: {{ tag_name|get_contrast_color_filter }}">
+                <h2>{{ tag_name }}</h2>
+            </span>
+        </div>
+    </div>
+    <div class="row gap-3">
+        {% for question in questions %}
+            {% include 'layouts/question_card.html' with question=question %}
+        {% endfor %}
+    </div>
+    {% block paginator %}
+        {% include 'layouts/paginator.html' %}
+    {% endblock %}
+{% endblock %}

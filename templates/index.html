@@ -1,0 +1,18 @@
+{% extends "layouts/base.html" %}
+{% load static %}
+{% block content %}
+    <div class="row d-flex mb-3 align-items-center">
+        <div class="col d-flex gap-3 align-items-center">
+            <h2>New questions</h2>
+            <a href="{% url 'hot' %}">Hot questions</a>
+        </div>
+    </div>
+    <div class="row gap-3">
+        {% for question in questionCards %}
+            {% include 'layouts/question_card.html' with question=question %}
+        {% endfor %}
+    </div>
+    {% block paginator %}
+        {% include 'layouts/paginator.html' %}
+    {% endblock %}
+{% endblock %}

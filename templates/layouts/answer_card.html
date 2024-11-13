@@ -1,0 +1,29 @@
+{% block answer %}
+    <div class="card mb-3 pt-2 pb-1" style="max-width: 1440px;">
+        <div class="d-flex row g-0 align-items-top">
+            <div class="col-auto text-center m-0 p-0">
+                <div class="m-3 mb-1" style="width: 96px; height: 96px;">
+                    <img src="https://api.slingacademy.com/public/sample-photos/1.jpeg" alt="User picture" class="img-fluid rounded-circle" style="width: 100%; height: 100%; object-fit: cover">
+                </div>
+                <div class="m-3 mt-1">
+                    <a href="#">@{{ answer.author }}</a>
+                </div>
+                <div class="m-3">
+                    <label>
+                        <input type="number" value="{{ answer.upvotes }}" class="form-control form-control-sm text-center" style="width: 96px;">
+                    </label>
+                </div>
+            </div>
+            <div class="col d-flex flex-column m-0 p-0">
+                <div class="card-body p-0 d-flex flex-column flex-grow-1 m-3">
+                    <p class="card-text">{{ answer.text }}</p>
+                    <div class="d-flex align-items-center gap-1 mt-auto">
+                        {% if answer.is_correct %}
+                            <i class="bi bi-check2-square"></i>Correct answer!
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}

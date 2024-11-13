@@ -1,0 +1,18 @@
+{% load custom_filters %}
+{% block tags %}
+    <div class="row">
+        <h2>Popular Tags</h2>
+    </div>
+    <div class="d-flex gap-2" style="align-items: flex-start; flex-wrap: wrap">
+        {% for tag in popular_tags %}
+            <a class="text-decoration-none" href="{% url 'tagged' tag.title %}">
+                <span class="badge rounded-pill"
+                      style="background-color: {{ tag.title|string_to_hex_color_filter }};
+                      color: {{ tag.title|get_contrast_color_filter }};
+                      font-size: {{ tag.size }}px">
+                    {{ tag.title }}
+                </span>
+            </a>
+    {% endfor %}
+    </div>
+{% endblock %}

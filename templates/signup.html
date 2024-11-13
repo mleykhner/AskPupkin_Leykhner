@@ -1,0 +1,72 @@
+{% extends 'layouts/base.html' %}
+{% load static %}
+{% block navbar %}
+{% include 'layouts/navbar_unauthorized.html' %}
+{% endblock %}
+{% block content %}
+    <div class="row d-flex mb-5 align-items-center">
+        <div class="col d-flex gap-3 align-items-center">
+            <h2>Register</h2>
+        </div>
+    </div>
+    <div class="row d-flex mb-5 gap-5 w-75 justify-content-center">
+        <div class="row">
+            <p class="text-danger">Sorry, email is already in use!</p>
+        </div>
+        <div class="row">
+            <div class="col-3">
+                <span class="input-group-text" id="title-input">Nickname</span>
+            </div>
+            <div class="col">
+                <input type="text" class="form-control" placeholder="Enter a nickname" aria-label="Nickname">
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-3">
+                <span class="input-group-text">Email</span>
+            </div>
+            <div class="col">
+                <input type="text" class="form-control" placeholder="Enter email" aria-label="Email">
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-3">
+                <span class="input-group-text" id="tags-input">Login</span>
+            </div>
+            <div class="col">
+                <input type="text" class="form-control" placeholder="Enter login" aria-label="Login">
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-3">
+                <span class="input-group-text" id="tags-input">Avatar</span>
+            </div>
+            <div class="col justify-content-center">
+                <p class="form-control d-inline">c:/avatar.jpg</p>
+                <button type="button" class="btn btn-success">Upload new</button>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-3">
+                <span class="input-group-text" id="tags-input">Password</span>
+            </div>
+            <div class="col">
+                <input type="password" class="form-control" placeholder="Enter password" aria-label="Pass">
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-3">
+                <span class="input-group-text" id="tags-input">Repeat password</span>
+            </div>
+            <div class="col">
+                <input type="password" class="form-control" placeholder="Repeat password" aria-label="RepPass">
+            </div>
+        </div>
+        <div class="row mb-3">
+            <div class="col-3"></div>
+            <div class="col-auto">
+                <button type="button" class="btn btn-success">Register</button>
+            </div>
+        </div>
+    </div>
+{% endblock %}

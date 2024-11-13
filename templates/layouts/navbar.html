@@ -1,0 +1,23 @@
+{% block navbar %}
+    <nav class="navbar navbar-light bg-light">
+        <div class="container-fluid">
+            <div class="col-2 me-0 d-flex">
+                <a class="navbar-brand mx-auto" href="{% url 'index' %}">AskMe</a>
+            </div>
+            <form class="d-flex col-6 justify-content-center">
+                <input class="form-control d-flex" type="search" placeholder="Search" aria-label="Search">
+            </form>
+            <a class="btn btn-outline-success col-1" type="submit" href="{% url 'ask' %}">Ask</a>
+            <div class="d-flex gap-3 col-2 justify-content-end align-items-center" id="profile-info">
+                <div class="ratio ratio-1x1" style="max-height: 42px; max-width: 42px">
+                    <img src="avatar.jpg" alt="User picture" class="img-fluid object-fit-cover rounded-circle">
+                </div>
+                <div>
+                    <div>Dr. Pepper</div>
+                    <a style="font-size: smaller" href="{% url 'settings' %}">Settings</a>
+                    <a style="font-size: smaller" href="#">Log out</a>
+                </div>
+            </div>
+        </div>
+    </nav>
+{% endblock %}

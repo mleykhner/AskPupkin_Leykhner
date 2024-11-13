@@ -1,0 +1,61 @@
+{% extends "layouts/base.html" %}
+{% load custom_filters %}
+{% load static %}
+{% block content %}
+    <div class="row g-2 align-items-top m-0">
+        <div class="col-auto text-center m-0 p-0">
+            <div class="m-3 mb-1" style="width: 96px; height: 96px;">
+                <img src="https://api.slingacademy.com/public/sample-photos/1.jpeg" alt="User picture" class="img-fluid rounded-circle" style="width: 100%; height: 100%; object-fit: cover">
+            </div>
+            <div class="m-3 mt-1">
+                <a href="#">@{{ question.author }}</a>
+            </div>
+            <div class="m-3">
+                <label>
+                    <input type="number" value="{{ question.upvotes }}" class="form-control form-control-sm text-center" style="width: 96px;">
+                </label>
+            </div>
+        </div>
+        <div class="col d-flex flex-column m-0 p-0">
+            <div class="card-body p-0 d-flex flex-column flex-grow-1 m-3">
+                <h2 class="card-title mb-1">{{ question.title }}</h2>
+                <p class="card-text mb-1">{{ question.text }}</p>
+                <div class="mt-auto">
+                    {% for tag in question.tags %}
+                        <a class="text-decoration-none" href="{% url 'tagged' tag %}">
+                                <span class="badge rounded-pill"
+                                      style="background-color: {{ tag|string_to_hex_color_filter }};
+                                              color: {{ tag|get_contrast_color_filter }}"
+                                >{{ tag }}</span>
+                        </a>
+                    {% endfor %}
+                </div>
+            </div>
+        </div>
+    </div>
+    <hr class="hr" />
+    {% if answers %}
+        {% for answer in answers %}
+            <div class="row">
+                {% include 'layouts/answer_card.html' with answer=answer %}
+            </div>
+        {% endfor %}
+        {% block paginator %}
+            {% include 'layouts/paginator.html' %}
+        {% endblock %}
+    {% else %}
+        <div class="alert alert-dark" role="alert">
+            So far, no one has responded. You can be the first!
+        </div>
+    {% endif %}
+    <div class="m-0 row d-flex">
+        <a id="answer"></a>
+        <div class="col m-0 p-0">
+            <textarea class=" w-100 form-control" aria-label="Your answer" rows="8"
+                      placeholder="Enter your answer here..."></textarea>
+        </div>
+        <div class="col-1 d-flex align-items-end">
+            <button type="button" class="btn btn-success">Answer</button>
+        </div>
+    </div>
+{% endblock %}

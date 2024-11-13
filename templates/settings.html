@@ -1,0 +1,58 @@
+{% extends 'layouts/base.html' %}
+{% load static %}
+{% block content %}
+    <div class="row d-flex mb-5 align-items-center">
+        <div class="col d-flex gap-3 align-items-center">
+            <h2>Settings: {{ user.nickname }}</h2>
+        </div>
+    </div>
+    <div class="row d-flex mb-5 gap-5 w-75 justify-content-center">
+        <div class="row">
+            <div class="col-3">
+                <span class="input-group-text" id="title-input">Nickname</span>
+            </div>
+            <div class="col">
+                <input type="text" class="form-control" placeholder="Enter a nickname" aria-label="Nickname"
+                       value="{{ user.nickname }}">
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-3">
+                <span class="input-group-text">Email</span>
+            </div>
+            <div class="col">
+                <input type="text" class="form-control" placeholder="Enter email" aria-label="Email"
+                       value="{{ user.email }}">
+            </div>
+        </div>
+        <div class="row mb-3">
+            <div class="col-3">
+                <span class="input-group-text" id="tags-input">Login</span>
+            </div>
+            <div class="col">
+                <input type="text" class="form-control" placeholder="Enter login" aria-label="Login"
+                       value="{{ user.login }}">
+            </div>
+        </div>
+        <div class="row mb-3">
+            <div class="col-3">
+                <span class="input-group-text" id="tags-input">Picture</span>
+            </div>
+            <div class="col">
+                <img src="{{ user.picture }}" alt="User picture" class="img-fluid" height="200" width="200">
+                <div class="row d-inline-flex px-3 mt-2 align-items-center">
+                    <p class="form-control">c:/avatar.jpg</p>
+                    <button type="button" class="btn btn-success">Upload new</button>
+                </div>
+            </div>
+        </div>
+        <div class="row mb-3">
+            <div class="col-3">
+                
+            </div>
+            <div class="col-auto">
+                <button type="button" class="btn btn-success">Save</button>
+            </div>
+        </div>
+    </div>
+{% endblock %}

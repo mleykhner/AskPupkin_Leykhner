@@ -1,0 +1,44 @@
+{% extends 'layouts/base.html' %}
+{% block navbar %}
+{% include 'layouts/navbar_unauthorized.html' %}
+{% endblock %}
+{% block content %}
+    <div class="row d-flex mb-5 align-items-center">
+        <div class="col d-flex gap-3 align-items-center">
+            <h2>Log In</h2>
+        </div>
+    </div>
+    <div class="row d-flex mb-5 gap-5 w-75 justify-content-center">
+        <div class="row">
+            <p class="text-danger">Check your credentials!</p>
+        </div>
+        <div class="row">
+            <div class="col-3">
+                <span class="input-group-text" id="tags-input">Login</span>
+            </div>
+            <div class="col">
+                <input type="text" class="form-control" placeholder="Enter login" aria-label="Login">
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-3">
+                <span class="input-group-text" id="tags-input">Password</span>
+            </div>
+            <div class="col">
+                <input type="password" class="form-control" placeholder="Enter password" aria-label="Pass">
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-3"></div>
+            <div class="col-auto">
+                <button type="button" class="btn btn-success">Log in!</button>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-3"></div>
+            <div class="col-auto">
+                <a href="{% url 'signup' %}" class="">Create new account</a>
+            </div>
+        </div>
+    </div>
+{% endblock %}
