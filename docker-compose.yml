@@ -5,16 +5,18 @@ services:
     volumes:
       - .:/opt/app/
     ports:
-      - '8000:8000'
+      - '8000'
     env_file:
       - ./env/django.env
+    depends_on:
+      - postgres
     links:
-      - db
+      - postgres
 
-  db:
-    container_name: db
+  postgres:
+    container_name: postgres
     image: "postgres:14"
     ports:
-      - "5432:5432"
+      - '5432'
     env_file:
       - ./env/postgres.env
