@@ -1,4 +1,9 @@
+import os
+import uuid
+from io import BytesIO
+
 from PIL import Image
+from django.core.files.base import ContentFile
 from django.db import models
 from django.contrib.auth.models import User
 from django.db.models import Sum, Case, When, Count, Max, ExpressionWrapper, FloatField, F, IntegerField
@@ -61,7 +66,7 @@ class Tag(models.Model):
 class Profile(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)
     nickname = models.CharField(max_length=30)
-    avatar = models.ImageField(upload_to="avatars/", null=True, blank=True)
+    avatar = models.ImageField(upload_to=".", null=True, blank=True)
     objects = ProfileManager()
 
     def save(self, *args, **kwargs):
@@ -71,6 +76,9 @@ class Profile(models.Model):
             avatar_path = self.avatar.path
             image = Image.open(avatar_path)
 
+            if image.mode != 'RGB':
+                image = image.convert('RGB')
+
             width, height = image.size
             min_dim = min(width, height)
             left = (width - min_dim) / 2
@@ -79,9 +87,21 @@ class Profile(models.Model):
             bottom = (height + min_dim) / 2
             image = image.crop((left, top, right, bottom))
 
+            filename = f"{uuid.uuid4()}.jpeg"
+
             image = image.resize((250, 250))
 
-            image.save(avatar_path)
+            buffer = BytesIO()
+            image.save(buffer, format='JPEG', quality=85)
+            buffer.seek(0)
+
+            self.avatar.save(filename, ContentFile(buffer.read()), save=False)
+            buffer.close()
+
+            if os.path.exists(avatar_path):
+                os.remove(avatar_path)
+
+            super().save(*args, **kwargs)
 
     def __str__(self):
         return self.user.username

@@ -10,6 +10,11 @@ COPY ./requirements.txt /opt/app/requirements.txt
 RUN chmod +x /opt/app/requirements.txt
 RUN pip install -r requirements.txt
 
-COPY . /opt/app/
+COPY ./app/ /opt/app/app/
+COPY ./AskPupkin_Leykhner/ /opt/app/AskPupkin_Leykhner/
+COPY ./templates/ /opt/app/templates/
+COPY ./manage.py /opt/app/manage.py
 
-CMD ["python", "manage.py", "runserver", "0.0.0.0:8000"]
+COPY ./start.sh /opt/app/start.sh
+RUN chmod +x /opt/app/start.sh
+ENTRYPOINT ["/opt/app/start.sh"]

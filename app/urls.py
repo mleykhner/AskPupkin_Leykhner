@@ -19,4 +19,4 @@ urlpatterns = [
     path('question/vote/', views.vote_question, name='vote_question'),
     path('answer/vote/', views.vote_answer, name='vote_answer'),
 
-] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
+]
