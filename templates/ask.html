@@ -6,31 +6,43 @@
             <h2>Ask a question</h2>
         </div>
     </div>
-    <div class="row d-flex mb-5 gap-5 w-75 justify-content-center">
-        <div class="row">
-            <div class="col-auto">
-                <span class="input-group-text" id="title-input">Title</span>
+    <form method="POST" enctype="multipart/form-data">
+        {% csrf_token %}
+        <div class="row d-flex mb-5 gap-5 w-75 justify-content-center">
+            <div class="row">
+                <div class="col-auto">
+                    <span class="input-group-text" id="title-input">Title</span>
+                </div>
+                <div class="col">
+                    <input type="text" name="{{ form.title.name }}" class="form-control" placeholder="What is your question about?" aria-label="Title" value="{{ form.title.value|default:'' }}">
+                    {% for error in form.title.errors %}
+                        <div class="text-danger">{{ error }}</div>
+                    {% endfor %}
+                </div>
             </div>
-            <div class="col">
-                <input type="text" class="form-control" placeholder="What is your question about?" aria-label="Title">
+            <div class="row">
+                <div class="col-auto">
+                    <span class="input-group-text">Text</span>
+                </div>
+                <div class="col">
+                    <textarea name="{{ form.text.name }}" class="form-control" aria-label="Text" rows="15">{{ form.text.value|default:'' }}</textarea>
+                    {% for error in form.text.errors %}
+                        <div class="text-danger">{{ error }}</div>
+                    {% endfor %}
+                </div>
+            </div>
+            <div class="row mb-3">
+                <div class="col-auto">
+                    <span class="input-group-text" id="tags-input">Tags</span>
+                </div>
+                <div class="col">
+                    <input type="text" name="{{ form.tags.name }}" class="form-control" placeholder="Enter tags" aria-label="Tags" value="{{ form.tags.value|default:'' }}">
+                    {% for error in form.tags.errors %}
+                        <div class="text-danger">{{ error }}</div>
+                    {% endfor %}
+                </div>
             </div>
         </div>
-        <div class="row">
-            <div class="col-auto">
-                <span class="input-group-text">Text</span>
-            </div>
-            <div class="col">
-                <textarea class="form-control" aria-label="Text" rows="15"></textarea>
-            </div>
-        </div>
-        <div class="row mb-3">
-            <div class="col-auto">
-                <span class="input-group-text" id="tags-input">Tags</span>
-            </div>
-            <div class="col">
-                <input type="text" class="form-control" placeholder="Enter tags" aria-label="Tags">
-            </div>
-        </div>
-    </div>
-    <button type="button" class="btn btn-success">Ask</button>
+    <button type="submit" class="btn btn-success">Ask</button>
+    </form>
 {% endblock %}

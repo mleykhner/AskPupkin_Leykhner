@@ -1,3 +1,4 @@
+from PIL import Image
 from django.db import models
 from django.contrib.auth.models import User
 from django.db.models import Sum, Case, When, Count, Max, ExpressionWrapper, FloatField, F, IntegerField
@@ -59,7 +60,29 @@ class Tag(models.Model):
 
 class Profile(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)
+    nickname = models.CharField(max_length=30)
+    avatar = models.ImageField(upload_to="avatars/", null=True, blank=True)
     objects = ProfileManager()
+
+    def save(self, *args, **kwargs):
+        super().save(*args, **kwargs)
+
+        if self.avatar:
+            avatar_path = self.avatar.path
+            image = Image.open(avatar_path)
+
+            width, height = image.size
+            min_dim = min(width, height)
+            left = (width - min_dim) / 2
+            top = (height - min_dim) / 2
+            right = (width + min_dim) / 2
+            bottom = (height + min_dim) / 2
+            image = image.crop((left, top, right, bottom))
+
+            image = image.resize((250, 250))
+
+            image.save(avatar_path)
+
     def __str__(self):
         return self.user.username
 

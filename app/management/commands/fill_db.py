@@ -36,7 +36,7 @@ class Command(BaseCommand):
         profiles = []
         profiles_bar = IncrementalBar('Generating users', max=len(users))
         for user in users:
-            profile = Profile(user=user)
+            profile = Profile(user=user, nickname=user.username)
             profiles.append(profile)
             profiles_bar.next()
         Profile.objects.bulk_create(profiles)

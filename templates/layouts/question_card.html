@@ -4,7 +4,11 @@
         <div class="row g-2 align-items-top m-0">
             <div class="col-auto text-center m-0 p-0">
                 <div class="m-0 mb-1" style="width: 96px; height: 96px;">
-                    <img src="https://api.slingacademy.com/public/sample-photos/1.jpeg" alt="User picture" class="img-fluid rounded-circle" style="width: 100%; height: 100%; object-fit: cover">
+                    {% if question.author.avatar %}
+                        <img src="{{ question.author.avatar.url }}" alt="User picture" class="img-fluid rounded-circle" style="width: 100%; height: 100%; object-fit: cover">
+                    {% else %}
+                        <img src="https://snu.edu.in/site/assets/files/6243/faculty-placeholder.1600x0.webp" alt="User picture" class="img-fluid rounded-circle" style="width: 100%; height: 100%; object-fit: cover">
+                    {% endif %}
                 </div>
                 <div class="my-3 mt-1 mx-auto" style="max-width: 96px">
                     <p class="text-truncate" style="font-size: x-small"><a href="#">@{{ question.author }}</a></p>

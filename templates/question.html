@@ -5,7 +5,11 @@
     <div class="row g-2 align-items-top m-0">
         <div class="col-auto text-center m-0 p-0">
             <div class="m-3 mb-1" style="width: 96px; height: 96px;">
-                <img src="https://api.slingacademy.com/public/sample-photos/1.jpeg" alt="User picture" class="img-fluid rounded-circle" style="width: 100%; height: 100%; object-fit: cover">
+                {% if question.author.avatar %}
+                    <img src="{{ question.author.avatar.url }}" alt="User picture" class="img-fluid rounded-circle" style="width: 100%; height: 100%; object-fit: cover">
+                {% else %}
+                    <img src="https://snu.edu.in/site/assets/files/6243/faculty-placeholder.1600x0.webp" alt="User picture" class="img-fluid rounded-circle" style="width: 100%; height: 100%; object-fit: cover">
+                {% endif %}
             </div>
             <div class="m-3 mt-1">
                 <a href="#">@{{ question.author }}</a>
@@ -48,14 +52,23 @@
             So far, no one has responded. You can be the first!
         </div>
     {% endif %}
-    <div class="m-0 row d-flex">
-        <a id="answer"></a>
-        <div class="col m-0 p-0">
-            <textarea class=" w-100 form-control" aria-label="Your answer" rows="8"
-                      placeholder="Enter your answer here..."></textarea>
+    {% if user.is_authenticated %}
+        <form method="POST" enctype="multipart/form-data">
+            {% csrf_token %}
+            <div class="m-0 row d-flex">
+                <a id="answer"></a>
+                <div class="col m-0 p-0">
+            <textarea name="{{ form.text.name }}" class=" w-100 form-control" aria-label="Your answer" rows="8"
+                      placeholder="Enter your answer here..." value="{{ form.text.value|default:'' }}"></textarea>
+                </div>
+                <div class="col-1 d-flex align-items-end">
+                    <button type="submit" class="btn btn-success">Answer</button>
+                </div>
+            </div>
+        </form>
+    {% else %}
+        <div class="alert alert-dark" role="alert">
+            <a href="{% url 'login' %}?continue={{ request.path }}">Log in</a> to answer questions
         </div>
-        <div class="col-1 d-flex align-items-end">
-            <button type="button" class="btn btn-success">Answer</button>
-        </div>
-    </div>
+    {% endif %}
 {% endblock %}

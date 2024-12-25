@@ -10,7 +10,11 @@
 </head>
 <body>
 {% block navbar %}
-    {% include 'layouts/navbar.html' %}
+    {% if user.is_authenticated %}
+        {% include 'layouts/navbar.html' %}
+    {% else %}
+        {% include 'layouts/navbar_unauthorized.html' %}
+    {% endif %}
 {% endblock %}
 <main class="container-fluid row m-3 gap-3">
     <div class="col-9">

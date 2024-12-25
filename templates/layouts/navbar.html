@@ -10,12 +10,16 @@
             <a class="btn btn-outline-success col-1" type="submit" href="{% url 'ask' %}">Ask</a>
             <div class="d-flex gap-3 col-2 justify-content-end align-items-center" id="profile-info">
                 <div class="ratio ratio-1x1" style="max-height: 42px; max-width: 42px">
-                    <img src="avatar.jpg" alt="User picture" class="img-fluid object-fit-cover rounded-circle">
+                    {% if avatar_url %}
+                        <img src="{{ avatar_url }}" alt="{{ nickname }}" class="img-fluid object-fit-cover rounded-circle">
+                    {% else %}
+                        <img src="avatar.jpg" alt="User picture" class="img-fluid object-fit-cover rounded-circle">
+                    {% endif %}
                 </div>
                 <div>
-                    <div>Dr. Pepper</div>
+                    <div>{{ nickname }}</div>
                     <a style="font-size: smaller" href="{% url 'settings' %}">Settings</a>
-                    <a style="font-size: smaller" href="#">Log out</a>
+                    <a style="font-size: smaller" href="{% url 'logout' %}">Log out</a>
                 </div>
             </div>
         </div>
