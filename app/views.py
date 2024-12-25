@@ -2,11 +2,12 @@ from django.contrib import messages
 from django.contrib.auth import login, logout
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.forms import AuthenticationForm
+from django.http import JsonResponse
 from django.shortcuts import render, redirect
 
 from app import models
 from app.forms import UserRegistrationForm, ProfileForm, ProfileEditForm, QuestionForm, AnswerForm
-from app.models import Tag
+from app.models import Tag, Question, QuestionVote, Answer, AnswerVote
 from app.pagination import paginate
 
 
@@ -160,3 +161,71 @@ def settings(request):
         form = ProfileEditForm(instance=profile, user=user)
 
     return render(request, 'settings.html', {'form': form, 'user': user, 'profile': profile})
+
+@login_required
+def mark_correct_answer(request):
+    if request.method == 'POST':
+        question_id = request.POST.get('question_id')
+        answer_id = request.POST.get('answer_id')
+
+        found_question = models.Question.objects.get_by_id(question_id)
+        found_answer = found_question.answers.get(id=answer_id)
+
+        if found_question.author.user != request.user:
+            return JsonResponse({'error': 'Only the author of the question can mark the correct answer'}, status=403)
+
+        found_question.answers.update(is_correct=False)
+        found_answer.is_correct = True
+        found_answer.save()
+
+        return JsonResponse({'success': True, 'correct_answer_id': found_answer.id})
+
+    return JsonResponse({'error': 'Invalid request method'}, status=405)
+
+@login_required
+def vote_question(request):
+    if request.method == 'POST':
+        question_id = request.POST.get('question_id')
+        is_negative = request.POST.get('is_negative') == 'true'
+        try:
+            question = Question.objects.get(id=question_id)
+            vote, created = QuestionVote.objects.get_or_create(
+                question=question,
+                voter=request.user.profile,
+                defaults={'is_negative': is_negative}
+            )
+            if not created:
+                if vote.is_negative == is_negative:
+                    vote.delete()
+                else:
+                    vote.is_negative = is_negative
+                    vote.save()
+            total_votes = question.votes.filter(is_negative=False).count() - question.votes.filter(is_negative=True).count()
+            return JsonResponse({'success': True, 'total_votes': total_votes})
+        except Question.DoesNotExist:
+            return JsonResponse({'success': False, 'error': 'Question not found'})
+    return JsonResponse({'success': False, 'error': 'Invalid request'})
+
+@login_required
+def vote_answer(request):
+    if request.method == 'POST':
+        answer_id = request.POST.get('answer_id')
+        is_negative = request.POST.get('is_negative') == 'true'
+        try:
+            answer = Answer.objects.get(id=answer_id)
+            vote, created = AnswerVote.objects.get_or_create(
+                answer=answer,
+                voter=request.user.profile,
+                defaults={'is_negative': is_negative}
+            )
+            if not created:
+                if vote.is_negative == is_negative:
+                    vote.delete()
+                else:
+                    vote.is_negative = is_negative
+                    vote.save()
+            total_votes = answer.votes.filter(is_negative=False).count() - answer.votes.filter(is_negative=True).count()
+            return JsonResponse({'success': True, 'total_votes': total_votes})
+        except Answer.DoesNotExist:
+            return JsonResponse({'success': False, 'error': 'Answer not found'})
+    return JsonResponse({'success': False, 'error': 'Invalid request'})

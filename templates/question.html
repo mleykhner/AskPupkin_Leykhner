@@ -15,9 +15,23 @@
                 <a href="#">@{{ question.author }}</a>
             </div>
             <div class="m-3">
-                <label>
-                    <input type="number" value="{{ question.votes_total }}" class="form-control form-control-sm text-center" style="width: 96px;">
-                </label>
+                <div class="d-flex align-items-center gap-2">
+                    <button
+                            class="btn btn-sm btn-outline-success vote-btn"
+                            data-id="{{ question.id }}"
+                            data-type="question"
+                            data-action="like">
+                        👍
+                    </button>
+                    <button
+                            class="btn btn-sm btn-outline-danger vote-btn"
+                            data-id="{{ question.id }}"
+                            data-type="question"
+                            data-action="dislike">
+                        👎
+                    </button>
+                    <span id="question-votes-{{ question.id }}">{{ question.votes_total }}</span>
+                </div>
             </div>
         </div>
         <div class="col d-flex flex-column m-0 p-0">

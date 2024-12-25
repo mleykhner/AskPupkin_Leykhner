@@ -14,9 +14,23 @@
                     <a href="#">@{{ answer.author }}</a>
                 </div>
                 <div class="m-3">
-                    <label>
-                        <input type="number" value="{{ answer.upvotes }}" class="form-control form-control-sm text-center" style="width: 96px;">
-                    </label>
+                    <div class="d-flex align-items-center gap-2">
+                        <button
+                                class="btn btn-sm btn-outline-success vote-btn"
+                                data-id="{{ answer.id }}"
+                                data-type="answer"
+                                data-action="like">
+                            👍
+                        </button>
+                        <button
+                                class="btn btn-sm btn-outline-danger vote-btn"
+                                data-id="{{ answer.id }}"
+                                data-type="answer"
+                                data-action="dislike">
+                            👎
+                        </button>
+                        <span id="answer-votes-{{ answer.id }}">{{ answer.votes_total }}</span>
+                    </div>
                 </div>
             </div>
             <div class="col d-flex flex-column m-0 p-0">
@@ -24,7 +38,19 @@
                     <p class="card-text">{{ answer.text }}</p>
                     <div class="d-flex align-items-center gap-1 mt-auto">
                         {% if answer.is_correct %}
-                            <i class="bi bi-check2-square"></i>Correct answer!
+                            <span id="correct-answer-{{ answer.id }}">
+                                <i class="bi bi-check2-square"></i>Correct answer!
+                            </span>
+                        {% endif %}
+                        {% if user.is_authenticated and user == question.author.user %}
+                            <button
+                                    class="btn btn-sm btn-outline-success mark-correct-btn"
+{#                                    onclick="markCorrectAnswer({{ question.id }}, {{ answer.id }})"#}
+                                    data-id="{{ answer.id }}"
+                                    data-question="{{ question.id }}"
+                            >
+                                Mark as Correct
+                            </button>
                         {% endif %}
                     </div>
                 </div>

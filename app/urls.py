@@ -15,4 +15,8 @@ urlpatterns = [
     path('tag/<str:tag_name>', views.tag, name='tagged'),
     path('profile/edit', views.settings, name='settings'),
     path('hot', views.hot, name='hot'),
+    path('answer/mark_correct/', views.mark_correct_answer, name='mark_correct_answer'),
+    path('question/vote/', views.vote_question, name='vote_question'),
+    path('answer/vote/', views.vote_answer, name='vote_answer'),
+
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
