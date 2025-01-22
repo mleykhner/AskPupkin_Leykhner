@@ -6,9 +6,12 @@
         <div class="col-auto text-center m-0 p-0">
             <div class="m-3 mb-1" style="width: 96px; height: 96px;">
                 {% if question.author.avatar %}
-                    <img src="{{ question.author.avatar.url }}" alt="User picture" class="img-fluid rounded-circle" style="width: 100%; height: 100%; object-fit: cover">
+                    <img src="{{ question.author.avatar.url }}" alt="User picture" class="img-fluid rounded-circle"
+                         style="width: 100%; height: 100%; object-fit: cover">
                 {% else %}
-                    <img src="https://snu.edu.in/site/assets/files/6243/faculty-placeholder.1600x0.webp" alt="User picture" class="img-fluid rounded-circle" style="width: 100%; height: 100%; object-fit: cover">
+                    <img src="https://snu.edu.in/site/assets/files/6243/faculty-placeholder.1600x0.webp"
+                         alt="User picture" class="img-fluid rounded-circle"
+                         style="width: 100%; height: 100%; object-fit: cover">
                 {% endif %}
             </div>
             <div class="m-3 mt-1">
@@ -51,21 +54,23 @@
             </div>
         </div>
     </div>
-    <hr class="hr" />
-    {% if answers %}
-        {% for answer in answers %}
-            <div class="row">
-                {% include 'layouts/answer_card.html' with answer=answer %}
+    <hr class="hr"/>
+    <div class="answer-container" data-ws-url="{{ ws_url }}" data-token="{{ token }}" data-question-id="{{ question.id }}">
+        {% if answers %}
+            {% for answer in answers %}
+                <div class="row">
+                    {% include 'layouts/answer_card.html' with answer=answer %}
+                </div>
+            {% endfor %}
+            {% block paginator %}
+                {% include 'layouts/paginator.html' %}
+            {% endblock %}
+        {% else %}
+            <div class="alert alert-dark" role="alert">
+                So far, no one has responded. You can be the first!
             </div>
-        {% endfor %}
-        {% block paginator %}
-            {% include 'layouts/paginator.html' %}
-        {% endblock %}
-    {% else %}
-        <div class="alert alert-dark" role="alert">
-            So far, no one has responded. You can be the first!
-        </div>
-    {% endif %}
+        {% endif %}
+    </div>
     {% if user.is_authenticated %}
         <form method="POST" enctype="multipart/form-data">
             {% csrf_token %}
@@ -85,4 +90,58 @@
             <a href="{% url 'login' %}?continue={{ request.path }}">Log in</a> to answer questions
         </div>
     {% endif %}
+    <script src="https://unpkg.com/centrifuge@5.3.0/dist/centrifuge.js"></script>
+    <script src="{% static 'js/centrifugo.js' %}"></script>
+    <template id="answer-template">
+        <div class="card mb-3 pt-2 pb-1" style="max-width: 1440px;">
+            <a id="answer-%% answer_id %%"></a>
+            <div class="d-flex row g-0 align-items-top">
+                <div class="col-auto text-center m-0 p-0">
+                    <div class="m-3 mb-1" style="width: 96px; height: 96px;">
+                        <img src="%% avatar_url %%" alt="User picture" class="img-fluid rounded-circle"
+                             style="width: 100%; height: 100%; object-fit: cover">
+                    </div>
+                    <div class="m-3 mt-1">
+                        <a href="#">@%% author %%</a>
+                    </div>
+                    <div class="m-3">
+                        <div class="d-flex align-items-center gap-2">
+                            <button
+                                    class="btn btn-sm btn-outline-success vote-btn"
+                                    data-id="%% answer_id %%"
+                                    data-type="answer"
+                                    data-action="like">
+                                👍
+                            </button>
+                            <button
+                                    class="btn btn-sm btn-outline-danger vote-btn"
+                                    data-id="%% answer_id %%"
+                                    data-type="answer"
+                                    data-action="dislike">
+                                👎
+                            </button>
+                            <span id="answer-votes-%% answer_id %%">%% votes_total %%</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="col d-flex flex-column m-0 p-0">
+                    <div class="card-body p-0 d-flex flex-column flex-grow-1 m-3">
+                        <p class="card-text">%% text %%</p>
+                        <div class="d-flex align-items-center gap-1 mt-auto">
+                            {% if user.is_authenticated and user == question.author.user %}
+                                <button
+                                        class="btn btn-sm btn-outline-success mark-correct-btn"
+                                        {#onclick="markCorrectAnswer(%% question.id %%, %% answer.id %%)"#}
+                                        data-id="%% answer_id %%"
+                                        data-question="%% question_id %%"
+                                >
+                                    Mark as Correct
+                                </button>
+                            {% endif %}
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </template>
 {% endblock %}

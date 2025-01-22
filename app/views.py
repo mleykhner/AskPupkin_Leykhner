@@ -1,14 +1,21 @@
+import json
+
 from django.contrib import messages
 from django.contrib.auth import login, logout
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.forms import AuthenticationForm
+from django.core.serializers.json import DjangoJSONEncoder
+from django.forms import model_to_dict
 from django.http import JsonResponse
 from django.shortcuts import render, redirect
 
+from AskPupkin_Leykhner.settings import CENTRIFUGO_API_URL, CENTRIFUGO_API_KEY
 from app import models
 from app.forms import UserRegistrationForm, ProfileForm, ProfileEditForm, QuestionForm, AnswerForm
 from app.models import Tag, Question, QuestionVote, Answer, AnswerVote
 from app.pagination import paginate
+
+from cent import Client, PublishRequest
 
 
 def index(request):
@@ -34,6 +41,26 @@ def question(request, question_id):
             answer.author = request.user.profile
             answer.question = q
             answer.save()
+
+            data = {
+                "question_id": question_id,
+                "answer_id": answer.id,
+                "avatar_url": answer.author.avatar.url,
+                "text": answer.text,
+                "votes_total": 0
+            }
+
+            answer_json = json.dumps(data)
+
+            api_url = CENTRIFUGO_API_URL
+            api_key = CENTRIFUGO_API_KEY
+
+            try:
+                client = Client(api_url=api_url, api_key=api_key)
+                r = PublishRequest(channel=str(question_id), data=json.loads(answer_json))
+                result = client.publish(r)
+            except Exception as e:
+                print(f"Error while publishing to Centrifugo: {e}")
 
             return redirect(f"{request.path}#answer-{answer.id}")
     else:

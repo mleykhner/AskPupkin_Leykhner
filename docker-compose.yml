@@ -17,6 +17,21 @@ services:
     image: postgres:14
     env_file:
       - ./env/postgres.env
+    volumes:
+      - ./pgdata:/var/lib/postgresql/data
+
+  centrifugo:
+    container_name: centrifugo
+    image: centrifugo/centrifugo:v6
+    volumes:
+      - ./env/centrifugo.json:/centrifugo/centrifugo.json
+    command: centrifugo -c centrifugo.json
+    ports:
+      - '9000:9000'
+    ulimits:
+      nofile:
+        soft: 65535
+        hard: 65535
 
   nginx:
     image: nginx:latest
@@ -29,3 +44,7 @@ services:
       - ./static:/opt/app/static:ro
       - ./uploads:/opt/app/uploads:rw
     restart: unless-stopped
+
+volumes:
+  pgdata:
+    driver: local

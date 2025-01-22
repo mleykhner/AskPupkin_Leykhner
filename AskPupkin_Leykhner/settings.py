@@ -69,7 +69,8 @@ TEMPLATES = [
                 'django.contrib.messages.context_processors.messages',
                 'app.context_processors.popular_tags',
                 'app.context_processors.best_members',
-                'app.context_processors.user_navbar'
+                'app.context_processors.user_navbar',
+                'app.context_processors.get_centrifugo_info'
             ],
         },
     },
@@ -145,3 +146,8 @@ LOGOUT_REDIRECT_URL = '/'
 
 MEDIA_URL = '/uploads/'
 MEDIA_ROOT = BASE_DIR / 'uploads'
+# TODO: Убрать ключ
+CENTRIFUGO_SECRET_KEY = "bbe7d157-a253-4094-9759-06a8236543f9"
+CENTRIFUGO_WS_URL = "ws://localhost:9000/connection/websocket"
+CENTRIFUGO_API_KEY = "d7627bb6-2292-4911-82e1-615c0ed3eebb"
+CENTRIFUGO_API_URL = os.environ.get("CENTRIFUGO_API_URL", default="http://centrifugo:9000/api")

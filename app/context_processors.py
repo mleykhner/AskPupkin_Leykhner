@@ -1,7 +1,16 @@
 # from models.popular_tag import mock_popular_tags
 from app import models
 from app.models import Profile
+import jwt
+import time
+from AskPupkin_Leykhner.settings import CENTRIFUGO_SECRET_KEY, CENTRIFUGO_WS_URL
 
+def get_centrifugo_info(request):
+    secret = CENTRIFUGO_SECRET_KEY
+    ws_url = CENTRIFUGO_WS_URL
+    claims = {"sub": str(request.user.id), "exp": int(time.time()) + 5*60}
+    token = jwt.encode(claims, secret, algorithm="HS256")
+    return {"token": token, "ws_url": ws_url}
 
 def popular_tags(request):
     popular = models.Tag.objects.get_popular()
